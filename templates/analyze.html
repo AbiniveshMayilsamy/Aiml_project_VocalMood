@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyze Voice</title>
+    <!-- Google Fonts for Aesthetic Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons (if needed) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Animate.css for Animations -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        /* Global Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f3e7ff 0%, #d9c2f2 50%, #c7a5e6 100%);
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Container Styling */
+        .container {
+            max-width: 600px;
+            margin: 100px auto 40px; /* Top margin for logo space */
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            box-shadow: 0 12px 30px rgba(106, 27, 154, 0.2);
+            animation: fadeIn 1s ease-in-out;
+            text-align: center;
+        }
+
+        .accent {
+            color: #6A1B9A;
+            text-shadow: 1px 1px 3px rgba(106, 27, 154, 0.3);
+        }
+
+        /* Logo in Top-Left */
+        .logo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 120px;
+            height: auto;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(106, 27, 154, 0.3);
+            background: white;
+            padding: 10px;
+        }
+
+        .logo:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 25px rgba(106, 27, 154, 0.5);
+        }
+
+        /* Upload Area */
+        .upload-area {
+            border: 3px dashed #6A1B9A;
+            border-radius: 10px;
+            padding: 40px;
+            margin: 20px 0;
+            background: rgba(106, 27, 154, 0.05);
+            transition: border-color 0.3s ease;
+        }
+
+        .upload-area:hover {
+            border-color: #9C27B0;
+        }
+
+        input[type="file"] {
+            padding: 10px;
+            margin: 20px 0;
+            border: 2px dashed #6A1B9A;
+            border-radius: 5px;
+            width: 300px;
+            background: white;
+            cursor: pointer;
+        }
+
+        button {
+            background-color: #6A1B9A;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            cursor: pointer;
+            margin: 10px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        button:hover {
+            background-color: #5A0B8A;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        a {
+            color: #6A1B9A;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: #9C27B0;
+        }
+
+        /* Flashed Messages */
+        .flash-messages {
+            color: red;
+            margin: 20px 0;
+            animation: animate__animated animate__fadeIn 0.5s;
+        }
+
+        /* Floating Decorative Circles */
+        .decorative-circle {
+            position: fixed;
+            border-radius: 50%;
+            background: rgba(106, 27, 154, 0.15);
+            z-index: -1;
+            animation: float 6s ease-in-out infinite;
+            filter: blur(50px);
+        }
+
+        .circle1 {
+            top: 10%;
+            left: 5%;
+            width: 200px;
+            height: 200px;
+            animation-delay: 0s;
+        }
+
+        .circle2 {
+            bottom: 15%;
+            right: 10%;
+            width: 300px;
+            height: 300px;
+            animation-delay: 3s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(20px); }
+        }
+
+        /* Fade-in Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px;
+                margin: 80px auto 20px;
+            }
+
+            .logo {
+                width: 100px;
+                top: 10px;
+                left: 10px;
+            }
+
+            input[type="file"] {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Logo in Top-Left -->
+    <img src="{{ url_for('static', filename='vocalmood.png') }}" alt="Vocal Mood Logo" class="logo">
+
+    <!-- Decorative Floating Circles -->
+    <div class="decorative-circle circle1"></div>
+    <div class="decorative-circle circle2"></div>
+
+    <div class="container">
+        <h2 class="accent" id="analyze">Voice Emotion Analysis</h2>
+        
+        <div class="upload-area">
+            <form method="POST" enctype="multipart/form-data">
+                <p>Select your voice file (MP3 or M4A):</p>
+                <input type="file" name="file" accept=".mp3,.m4a" required><br>
+                <button type="submit">Analyze Emotion</button>
+            </form>
+        </div>
+        
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        
+        <p>
+            <a href="/">← Back to Home</a> | 
+            <a href="/history">View History</a> | 
+            <a href="#analyze">↑ Back to Top</a>
+        </p>
+    </div>
+</body>
+</html>

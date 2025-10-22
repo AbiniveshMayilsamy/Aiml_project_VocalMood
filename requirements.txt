@@ -1,0 +1,12 @@
+Flask
+Flask-SQLAlchemy
+PyMySQL
+numpy
+tensorflow
+scikit-learn
+librosa
+werkzeug
+Flask-SocketIO
+python-socketio
+eventlet
+soundfile
